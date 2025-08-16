@@ -10,7 +10,7 @@ module.exports = {
    */
 
   userSignUpValidation: (req, res, callback) => {
-    const schema = joi.object({
+    const schema = Joi.object({
       name: Joi.string().trim().required(),
       email: Joi.string().email().trim().required(),
       password: Joi.string().trim().min(8).required(),

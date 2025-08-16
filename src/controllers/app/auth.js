@@ -1,10 +1,16 @@
-const Response = require("../../../common/services/Response");
-const Constant = require("../../../common/services/Constant");
-const User = require("../models/auth");
-const { userSignUpValidation } = require("../services/Validation");
+const Response = require("../../../../common/services/Response");
+const Constant = require("../../../../common/services/Constant");
+const User = require("../../models/auth");
+const { userSignUpValidation } = require("../../services/Validation");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
 
 module.exports = {
+  /**
+   * @description This function is used to register user
+   * @param req
+   * @param res
+   */
   userSignUp: async (req, res) => {
     try {
       const requestParams = req.body;
@@ -60,7 +66,10 @@ module.exports = {
               status: Constant.INACTIVE,
             };
 
-            const userResponse = await User.create(userObj);
+            const userResponse = await User.create(userObj); //user created
+
+            //calling profile service so that user profile is created
+            await axios.post("", {});
 
             return Response.successResponseData(
               res,
