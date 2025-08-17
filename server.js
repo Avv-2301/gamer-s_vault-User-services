@@ -14,6 +14,10 @@ app.use(cookieParser());
 const { connect } = require("./src/config/dbConnection");
 connect();
 
+//routes
+const indexRoutes = require('./src/routes/index')
+app.use("/", indexRoutes);
+
 app.get("/", (req, res) => {
   return res.json({
     success: true,
