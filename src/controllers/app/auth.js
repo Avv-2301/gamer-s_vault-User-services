@@ -69,7 +69,11 @@ module.exports = {
             const userResponse = await User.create(userObj); //user created
 
             //calling profile service so that user profile is created
-            await axios.post("", {});
+            await axios.post("http://localhost:4002/profile/create-profile", {
+              userId: userResponse?._id,
+              name: userResponse?.name,
+              email: userResponse?.email,
+            });
 
             return Response.successResponseData(
               res,
