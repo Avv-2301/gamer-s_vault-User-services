@@ -25,7 +25,7 @@ module.exports = {
         return Response.errorResponseData(
           res,
           "All fields Required",
-          Constant.NOT_ACCEPTABLE
+          Constant.BAD_REQUEST
         );
       }
 
@@ -51,7 +51,7 @@ module.exports = {
             return Response.successResponseWithoutData(
               res,
               "User already exist",
-              Constant.FAIL
+              Constant.BAD_REQUEST
             );
           } else {
             const Hash_Password = await bcrypt.hash(requestParams.password, 10);
