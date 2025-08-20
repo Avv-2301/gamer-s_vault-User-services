@@ -21,7 +21,7 @@ module.exports = {
       return Response.validationErrorResponseData(
         res,
         "All fields are required",
-        Constant.NOT_ACCEPTABLE
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
       );
     }
     return callback(true);
@@ -43,7 +43,7 @@ module.exports = {
       return Response.validationErrorResponseData(
         res,
         "all fields are required",
-        Constant.NOT_ACCEPTABLE
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
       );
     }
     return callback(true);
@@ -64,7 +64,7 @@ module.exports = {
       return Response.validationErrorResponseData(
         res,
         "UserId is not in proper format",
-        Constant.NOT_ACCEPTABLE
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
       );
     }
     return callback(true);

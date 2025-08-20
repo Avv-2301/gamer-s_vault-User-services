@@ -15,7 +15,7 @@ module.exports = {
   userSignUp: async (req, res) => {
     try {
       const requestParams = req.body;
-      console.log(requestParams, "SIGN-UP PARAMS FROM BODY");
+      // console.log(requestParams, "SIGN-UP PARAMS FROM BODY");
 
       if (
         !requestParams.name ||
@@ -26,7 +26,7 @@ module.exports = {
         return Response.errorResponseData(
           res,
           "All fields Required",
-          Constant.BAD_REQUEST
+          Constant.STATUS_CODES.BAD_REQUEST
         );
       }
 
@@ -36,7 +36,7 @@ module.exports = {
             return Response.errorResponseData(
               res,
               "Password Not matched",
-              Constant.NOT_ACCEPTABLE
+              Constant.STATUS_CODES.NOT_ACCEPTABLE
             );
           }
           const findUser = await User.findOne(
@@ -51,7 +51,7 @@ module.exports = {
             return Response.successResponseWithoutData(
               res,
               "User already exist",
-              Constant.BAD_REQUEST
+              Constant.STATUS_CODES.BAD_REQUEST
             );
           } else {
             const Hash_Password = await bcrypt.hash(requestParams.password, 10);
@@ -60,10 +60,10 @@ module.exports = {
               name: requestParams?.name,
               email: requestParams?.email,
               password: Hash_Password,
-              verified: Constant.FALSE,
+              verified: Constant.FLAGS.FALSE,
               authType: Constant.AUTH_TYPE.DIRECT,
               role: Constant.ROLE.USER,
-              status: Constant.INACTIVE,
+              status: Constant.FLAGS.INACTIVE,
             };
 
             const userResponse = await User.create(userObj); //user created
@@ -80,12 +80,11 @@ module.exports = {
               {},
               "POST"
             );
-            console.log("Profile created:", profileResponse);
 
             return Response.successResponseData(
               res,
               { userResponse: userResponse, profileResponse: profileResponse },
-              Constant.CREATED,
+              Constant.STATUS_CODES.CREATED,
               "User Registered successfully"
             );
           }
@@ -96,7 +95,7 @@ module.exports = {
       return Response.errorResponseData(
         res,
         error.message,
-        Constant.INTERNAL_SERVER
+        Constant.STATUS_CODES.INTERNAL_SERVER
       );
     }
   },

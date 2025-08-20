@@ -12,7 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@avv-2301/gamers-vault-common": "^1.0.4",
+    "@avv-2301/gamers-vault-common": "^1.0.6",
     "axios": "^1.11.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
