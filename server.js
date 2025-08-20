@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 8080;
 
 app.use(express.json({ limit: "10mb" }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const { connect } = require("./src/config/dbConnection");

@@ -25,11 +25,6 @@ const authSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    profile: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Profile",
-      required: true,
-    },
     authType: {
       type: String,
       maxLength: 100,

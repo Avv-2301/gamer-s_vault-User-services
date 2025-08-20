@@ -1,5 +1,6 @@
-const Response  = require('@avv-2301/gamers-vault-common');
-const Constant = require('@avv-2301/gamers-vault-common');
+const Response = require("@avv-2301/gamers-vault-common");
+const Constant = require("@avv-2301/gamers-vault-common");
+const { callService } = require("@avv-2301/gamers-vault-common");
 const User = require("../../models/auth");
 const { userSignUpValidation } = require("../../services/Validation");
 const bcrypt = require("bcrypt");
@@ -45,7 +46,6 @@ module.exports = {
               verified: 1,
             }
           );
-          console.log(findUser, "USER DATA");
 
           if (findUser && findUser.verified != null) {
             return Response.successResponseWithoutData(
@@ -69,15 +69,22 @@ module.exports = {
             const userResponse = await User.create(userObj); //user created
 
             //calling profile service so that user profile is created
-            await axios.post("http://localhost:4002/profile/create-profile", {
-              userId: userResponse?._id,
-              name: userResponse?.name,
-              email: userResponse?.email,
-            });
+            const profileResponse = await callService(
+              "profiles",
+              "/create-profile",
+              {
+                name: requestParams?.name,
+                userId: userResponse?._id,
+                email: requestParams?.email,
+              },
+              {},
+              "POST"
+            );
+            console.log("Profile created:", profileResponse);
 
             return Response.successResponseData(
               res,
-              userResponse,
+              { userResponse: userResponse, profileResponse: profileResponse },
               Constant.CREATED,
               "User Registered successfully"
             );
