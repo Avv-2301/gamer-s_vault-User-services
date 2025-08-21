@@ -69,4 +69,20 @@ module.exports = {
     }
     return callback(true);
   },
+
+  getuserValidation: (req, res, callback) =>{
+    const schema = Joi.object({
+      userId: Joi.string().trim().required(),
+    });
+
+    const { error } = schema.validate(req);
+    if(error){
+      return Response.validationErrorResponseData(
+        res,
+        "UserId format not matched",
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
+      )
+    }
+    return callback(true);
+  }
 };
