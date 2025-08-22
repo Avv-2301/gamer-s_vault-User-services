@@ -99,4 +99,21 @@ module.exports = {
       );
     }
   },
+
+  /**
+   * @description This function is used to login user
+   * @param req
+   * @param res
+   */
+  login: async (req, res) => {
+    try {
+    } catch (error) {
+      console.log(error);
+      return Response.errorResponseData(
+        res,
+        error.message,
+        Constant.STATUS_CODES.INTERNAL_SERVER
+      );
+    }
+  },
 };
