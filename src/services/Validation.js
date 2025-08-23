@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const Response = require('@avv-2301/gamers-vault-common');
-const Constant = require('@avv-2301/gamers-vault-common');
+const Response = require("@avv-2301/gamers-vault-common");
+const Constant = require("@avv-2301/gamers-vault-common");
 
 module.exports = {
   /**
@@ -70,19 +70,50 @@ module.exports = {
     return callback(true);
   },
 
-  getuserValidation: (req, res, callback) =>{
+  /**
+   * @description This function is used to check get user validation
+   * @param {*} req
+   * @param {*} res
+   * @param {*} callback
+   * @returns true
+   */
+  getuserValidation: (req, res, callback) => {
     const schema = Joi.object({
       userId: Joi.string().trim().required(),
     });
 
     const { error } = schema.validate(req);
-    if(error){
+    if (error) {
       return Response.validationErrorResponseData(
         res,
         "UserId format not matched",
         Constant.STATUS_CODES.NOT_ACCEPTABLE
-      )
+      );
     }
     return callback(true);
-  }
+  },
+
+  /**
+   * @description This function is used to check password field
+   * @param {*} req
+   * @param {*} res
+   * @param {*} callback
+   * @return true
+   */
+  passwordFieldValidation: (req, res, callback) => {
+    const schema = Joi.object({
+      password: Joi.string().trim().min(8).required(),
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      return Response.validationErrorResponseData(
+        res,
+        "UserId format not matched",
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
+      );
+    }
+    return callback(true);
+  },
 };

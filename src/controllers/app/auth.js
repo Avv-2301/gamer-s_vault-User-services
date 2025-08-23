@@ -2,9 +2,12 @@ const Response = require("@avv-2301/gamers-vault-common");
 const Constant = require("@avv-2301/gamers-vault-common");
 const { callService } = require("@avv-2301/gamers-vault-common");
 const User = require("../../models/auth");
-const { userSignUpValidation } = require("../../services/Validation");
+const {
+  userSignUpValidation,
+  passwordFieldValidation,
+} = require("../../services/Validation");
 const bcrypt = require("bcrypt");
-const axios = require("axios");
+const zxcvbn = require("zxcvbn");
 
 module.exports = {
   /**
@@ -54,6 +57,14 @@ module.exports = {
               Constant.STATUS_CODES.BAD_REQUEST
             );
           } else {
+            const result = zxcvbn(requestParams?.password);
+            if (result?.score < 2) {
+              return Response.errorResponseWithoutData(
+                res,
+                "Password to weak",
+                Constant.STATUS_CODES.NOT_ACCEPTABLE
+              );
+            }
             const Hash_Password = await bcrypt.hash(requestParams.password, 10);
 
             let userObj = {
@@ -107,6 +118,45 @@ module.exports = {
    */
   login: async (req, res) => {
     try {
+    } catch (error) {
+      console.log(error);
+      return Response.errorResponseData(
+        res,
+        error.message,
+        Constant.STATUS_CODES.INTERNAL_SERVER
+      );
+    }
+  },
+
+  /**
+   * @description This function is used to check password strength
+   * @param req
+   * @param res
+   */
+  checkPasswordStrength: async (req, res) => {
+    try {
+      const { password } = req.body;
+
+      if (!password) {
+        return Response.errorResponseWithoutData(
+          res,
+          "Password field is empty",
+          Constant.STATUS_CODES.NO_CONTENT
+        );
+      }
+
+      passwordFieldValidation(password, res, async (validate) => {
+        if (validate) {
+          const result = zxcvbn(password);
+
+          return Response.successResponseWithData(
+            res,
+            { score: result?.score, feedback: result?.feedback },
+            "Password strength",
+            Constant.STATUS_CODES.SUCCESS
+          );
+        }
+      });
     } catch (error) {
       console.log(error);
       return Response.errorResponseData(
