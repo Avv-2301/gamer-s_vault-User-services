@@ -4,7 +4,7 @@ const { callService } = require("@avv-2301/gamers-vault-common");
 const User = require("../../models/auth");
 const { userSignUpValidation } = require("../../services/Validation");
 const bcrypt = require("bcrypt");
-const axios = require("axios");
+const zxcvbn = require("zxcvbn");
 
 module.exports = {
   /**
@@ -54,6 +54,14 @@ module.exports = {
               Constant.STATUS_CODES.BAD_REQUEST
             );
           } else {
+            const result = zxcvbn(requestParams?.password);
+            if (result?.score < 2) {
+              return Response.errorResponseWithoutData(
+                res,
+                "Password to weak",
+                Constant.STATUS_CODES.NOT_ACCEPTABLE
+              );
+            }
             const Hash_Password = await bcrypt.hash(requestParams.password, 10);
 
             let userObj = {
