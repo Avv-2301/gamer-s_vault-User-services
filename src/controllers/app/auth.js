@@ -129,6 +129,52 @@ module.exports = {
   },
 
   /**
+   * @description This function is used to logout user
+   * @param req
+   * @param res
+   */
+  logout: async (req, res) => {
+    try {
+      const requestParams = req.body;
+      if (!requestParams?.userId) {
+        return Response.errorResponseWithoutData(
+          res,
+          "User Id required",
+          Constant.STATUS_CODES.NO_CONTENT
+        );
+      }
+      logoutValidation(requestParams, res, async (validate) => {
+        if (validate) {
+          const findUser = await User.findOne(
+            { _id: requestParams?.userId },
+            { _id: 1 }
+          );
+          if (!findUser) {
+            return Response.errorResponseWithoutData(
+              res,
+              "User not found",
+              Constant.STATUS_CODES.NO_CONTENT
+            );
+          }
+          //logic for logout user
+          return Response.successResponseWithoutData(
+            res,
+            "User logged out successfully",
+            Constant.STATUS_CODES.SUCCESS
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.errorResponseData(
+        res,
+        error.message,
+        Constant.STATUS_CODES.INTERNAL_SERVER
+      );
+    }
+  },
+
+  /**
    * @description This function is used to check password strength
    * @param req
    * @param res
