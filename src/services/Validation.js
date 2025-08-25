@@ -116,4 +116,26 @@ module.exports = {
     }
     return callback(true);
   },
+
+  /**
+   * @description This function is used to validate the fields for logout user
+   * @param req
+   * @param res
+   * @param callback
+   * @return true
+   */
+  logoutValidation: (req, res, callback) => {
+    const schema = Joi.object({
+      userId: Joi.string().trim().required(),
+    });
+    const { error } = schema.validate(req);
+    if (error) {
+      return Response.validationErrorResponseData(
+        res,
+        "UserId is not in proper format",
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
+      );
+    }
+    return callback(true);
+  },
 };
