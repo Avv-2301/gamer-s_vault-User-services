@@ -71,6 +71,9 @@ npm run dev
 ```
 
 
+Configuration
+
+Create a .env file at the root of the project and add the following variables:
 ```bash
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/user_service
