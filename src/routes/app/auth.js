@@ -14,6 +14,6 @@ router.post("/login", login);
 router.post("/check-password-strength", checkPasswordStrength);
 
 //User Routes
-router.get("/get-user/:id", getUserData);
+router.get("/:id", getUserData);
 
 module.exports = router;

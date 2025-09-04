@@ -79,10 +79,10 @@ module.exports = {
    */
   getuserValidation: (req, res, callback) => {
     const schema = Joi.object({
-      userId: Joi.string().trim().required(),
+      userId: Joi.string().trim().hex().length(24).required()
     });
 
-    const { error } = schema.validate(req);
+    const { error } = schema.validate(req.body);
     if (error) {
       return Response.validationErrorResponseData(
         res,

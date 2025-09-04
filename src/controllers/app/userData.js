@@ -12,21 +12,21 @@ module.exports = {
 
   getUserData: async (req, res) => {
     try {
-      const requestParams = req.body;
-      console.log(requestParams);
+      const userId = req.params.id;
+      // console.log(userId, "PARAMS");
 
-      if (!requestParams?.userId) {
+      if (!userId) {
         return Response.errorResponseData(
           res,
           "All fields Required",
-          Constant.STATUS_CODES.BAD_REQUEST
+          Constant.STATUS_CODES.NO_CONTENT
         );
       }
 
-      getuserValidation(requestParams, res, async (validate) => {
+      getuserValidation(userId, res, async (validate) => {
         if (validate) {
-          const findUser = await User.findOne(requestParams?.userId);
-          console.log(findUser, "USER FOUND");
+          const findUser = await User.findOne({ _id: userId });
+          // console.log(findUser, "USER FOUND");
 
           return Response.successResponseWithData(
             res,
