@@ -5,6 +5,7 @@ const {
   login,
 } = require("../../controllers/app/auth");
 const { getUserData } = require("../../controllers/app/userData");
+const{ internalAuth } = require('../../middleware/internalAuth')
 
 const router = express.Router();
 
@@ -14,6 +15,6 @@ router.post("/login", login);
 router.post("/check-password-strength", checkPasswordStrength);
 
 //User Routes
-router.get("/:id", getUserData);
+router.get("/:id",internalAuth, getUserData);
 
 module.exports = router;

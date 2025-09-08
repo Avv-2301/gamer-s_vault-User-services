@@ -23,16 +23,27 @@ module.exports = {
         );
       }
 
+      //for projection token for mongodb to fetch only necessary fields
+      const fields = req.query.projection
+        ? req.query.projection.split(",")
+        : [];
+
+      //convert to mongodb projection
+      const projection = fields.reduce((acc, f) => {
+        acc[f.trim()] = 1;
+        return acc;
+      }, {});
+
       getuserValidation(userId, res, async (validate) => {
         if (validate) {
-          const findUser = await User.findById(userId)
+          const findUser = await User.findById(userId, projection);
           // console.log(findUser, "USER FOUND");
 
           return Response.successResponseData(
             res,
             findUser,
             Constant.STATUS_CODES.SUCCESS,
-            "User found",
+            "User found"
           );
         } else {
           return Response.errorResponseWithoutData(
