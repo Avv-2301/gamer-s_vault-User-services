@@ -11,8 +11,8 @@ const bcrypt = require("bcrypt");
 const zxcvbn = require("zxcvbn");
 const UserLoginHistory = require("../../models/loginHistory");
 const { issueToken } = require("../../services/userJwt");
-const axios = require('axios');
-const ip = require('ip');
+const axios = require("axios");
+const ip = require("ip");
 
 module.exports = {
   /**
@@ -93,7 +93,7 @@ module.exports = {
                 userId: userResponse?._id,
                 email: requestParams?.email,
               },
-              {},
+              { "x-internal-call": "true" },
               "POST"
             );
 
@@ -157,9 +157,9 @@ module.exports = {
                 );
                 if (comparePassword) {
                   const expiresIn = rememberMe ? 60 * 60 * 24 * 15 : 60 * 60;
-                  console.log(expiresIn)
+                  console.log(expiresIn);
                   const userExpTime = Math.floor(Date.now() / 1000) + expiresIn;
-                  console.log(userExpTime)
+                  console.log(userExpTime);
 
                   const payload = {
                     id: user?._id,
