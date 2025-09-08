@@ -25,14 +25,14 @@ module.exports = {
 
       getuserValidation(userId, res, async (validate) => {
         if (validate) {
-          const findUser = await User.findOne({ _id: userId });
+          const findUser = await User.findById(userId)
           // console.log(findUser, "USER FOUND");
 
-          return Response.successResponseWithData(
+          return Response.successResponseData(
             res,
             findUser,
+            Constant.STATUS_CODES.SUCCESS,
             "User found",
-            Constant.STATUS_CODES.SUCCESS
           );
         } else {
           return Response.errorResponseWithoutData(
