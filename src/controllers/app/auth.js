@@ -6,6 +6,7 @@ const {
   userSignUpValidation,
   passwordFieldValidation,
   loginValidation,
+  logoutValidation,
 } = require("../../services/Validation");
 const bcrypt = require("bcrypt");
 const zxcvbn = require("zxcvbn");
