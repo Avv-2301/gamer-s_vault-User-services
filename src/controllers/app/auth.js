@@ -313,7 +313,17 @@ module.exports = {
               Constant.STATUS_CODES.NO_CONTENT
             );
           }
-          //logic for logout user
+          await User.updateOne(
+            { _id: requestParams.user_id },
+            {
+              $set: {
+                token: null,
+                tokenExpiresAt: null,
+                "ip_address.system_ip": null,
+                "ip_address.browser_ip": null,
+              },
+            }
+          );
           return Response.successResponseWithoutData(
             res,
             "User logged out successfully",

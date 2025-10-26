@@ -1,7 +1,10 @@
 const Response = require("@avv-2301/gamers-vault-common");
 const Constant = require("@avv-2301/gamers-vault-common");
 const User = require("../../models/auth");
-const { loginValidation } = require("../../services/Validation");
+const {
+  loginValidation,
+  logoutValidation,
+} = require("../../services/Validation");
 const UserLoginHistory = require("../../models/loginHistory");
 const { issueToken } = require("../../services/userJwt");
 const axios = require("axios");
@@ -162,6 +165,62 @@ module.exports = {
               Constant.STATUS_CODES.BAD_REQUEST
             );
           }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.errorResponseData(
+        res,
+        error.message,
+        Constant.STATUS_CODES.INTERNAL_SERVER
+      );
+    }
+  },
+
+  /**
+   * @description This function is used to logout
+   * @param req
+   * @param res
+   */
+  logout: async (req, res) => {
+    try {
+      const requestParams = req.body;
+      if (!requestParams?.userId) {
+        return Response.errorResponseWithoutData(
+          res,
+          "User Id required",
+          Constant.STATUS_CODES.NO_CONTENT
+        );
+      }
+      logoutValidation(requestParams, res, async (validate) => {
+        if (validate) {
+          const findUser = await User.findOne(
+            { _id: requestParams?.userId },
+            { _id: 1 }
+          );
+          if (!findUser) {
+            return Response.errorResponseWithoutData(
+              res,
+              "User not found",
+              Constant.STATUS_CODES.NO_CONTENT
+            );
+          }
+          await User.updateOne(
+            { _id: requestParams.user_id },
+            {
+              $set: {
+                token: null,
+                tokenExpiresAt: null,
+                "ip_address.system_ip": null,
+                "ip_address.browser_ip": null,
+              },
+            }
+          );
+          return Response.successResponseWithoutData(
+            res,
+            "User logged out successfully",
+            Constant.STATUS_CODES.SUCCESS
+          );
         }
       });
     } catch (error) {
