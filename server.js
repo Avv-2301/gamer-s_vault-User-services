@@ -5,7 +5,7 @@ const http = require("http");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4001;
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -22,6 +22,23 @@ app.get("/", (req, res) => {
   return res.json({
     success: true,
     message: "Your server is up and running.... for user-services ",
+  });
+});
+
+// Error handling for aborted requests (must be after routes)
+app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed' || (err.message && err.message.includes('aborted'))) {
+    return res.status(400).json({
+      success: false,
+      message: "Request parsing failed or request was aborted",
+      data: null
+    });
+  }
+  console.error("Error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error",
+    data: null
   });
 });
 
