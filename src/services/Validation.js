@@ -138,4 +138,27 @@ module.exports = {
     }
     return callback(true);
   },
+
+  /**
+   * @description This function is used to validate update password fields
+   * @param req
+   * @param res
+   * @param callback
+   * @return true
+   */
+  updatePasswordValidation: (req, res, callback) => {
+    const schema = Joi.object({
+      newPassword: Joi.string().trim().min(8).required(),
+      confirmPassword: Joi.string().trim().min(8).required(),
+    });
+    const { error } = schema.validate(req);
+    if (error) {
+      return Response.validationErrorResponseData(
+        res,
+        "New password and confirm password are required (minimum 8 characters)",
+        Constant.STATUS_CODES.NOT_ACCEPTABLE
+      );
+    }
+    return callback(true);
+  },
 };
